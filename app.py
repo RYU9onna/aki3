@@ -22,6 +22,16 @@ def home():
         openai.api_key = session['openai_api_key']
     else:
         openai.api_key = None
+    # ...
+    elif "set_api_key" in request.form:
+        api_key = request.form['api_key']
+        session['openai_api_key'] = api_key
+        openai.api_key = api_key
+        message = "APIキーがセットされました。"
+    elif "clear_api_key" in request.form:
+        session.pop('openai_api_key', None)
+        openai.api_key = None
+        message = "APIキーが解除されました。"
     if request.method == 'POST':
         if "play" in request.form:
             # GPT-3にトピックを考えさせる
@@ -60,16 +70,6 @@ def home():
                 message = "まずPlayを押してください"
         else:
             message = "まずPlayを押してください"
-    else:
-        message = "Playを押してください"elif "set_api_key" in request.form:
-        api_key = request.form['api_key']
-        session['openai_api_key'] = api_key
-        openai.api_key = api_key
-        message = "APIキーがセットされました。"
-    elif "clear_api_key" in request.form:
-        session.pop('openai_api_key', None)
-        openai.api_key = None
-        message = "APIキーが解除されました。"
     return render_template('index.html', message=message, playing=playing, image=session['image'])
 
 if __name__ == '__main__':
