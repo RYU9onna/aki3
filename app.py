@@ -38,9 +38,31 @@ def home():
             else:
                 message = "APIキーがセットされていません。"
         elif "surrender" in request.form:
-            # other code...
+            if 'topic' in session:
+                message = "答えは" + session['topic'] + "でした"
+                session.pop('topic', None)  # ゲームをリセット
+                playing = False
+                session['image'] = 'top4.png'
+            else:
+                message = "まずPlayを押してください"
         elif "question" in request.form:
-            # other code...
+            if 'topic' in session:
+                question = request.form['question']
+                # ユーザーが直接答えを推測した場合
+                if question == session['topic']:
+                    message = f"正解です！答えは {session['topic']} でした！"
+                    session.pop('topic', None)  # ゲームをリセット
+                    playing = False
+                    session['image'] = 'top3.png'
+                else:
+                    # GPT-4に質問を評価させる
+                    chat = openai.ChatCompletion.create(model="gpt-4", messages=[
+                        {"role": "system", "content": "あなたは私の20問ゲームの対戦相手です。"},
+                        {"role": "user", "content": f'"「{session["topic"]}"は、"{question}"？」と質問します。「はい」「少しそう」「どちらでもない」「違います」「少し違う」のいずれかだけで返事をします。'}
+                    ])
+                    answer = chat['choices'][0]['message']['content']
+                    message = answer
+                    playing = True
         else:
             message = "まずPlayを押してください"
     else:
