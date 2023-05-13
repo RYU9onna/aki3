@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta property="og:title" content="アキ姉ちゃんと遊ぼう">
+    <meta property="og:description" content="ChatGPTのアキ姉ちゃんに質問して何を連想しているか当ててみよう！">
+    <meta property="og:image" content="{{ url_for('static', filename='thumbnail.png', _external=True) }}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:type" content="website">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>アキ姉ちゃんと遊ぼう</title>
+    <style>
+    body {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    input[type="text"], input[type="submit"], button {
+        width: 100%; /* 横幅を最大に */
+        box-sizing: border-box; /* ボーダーとパディングを含めたサイズを指定 */
+        height: 50px; /* 高さを50pxに */
+        font-size: 20px; /* フォントサイズを大きく */
+    }
+    form {
+        margin-bottom: 20px; /* フォームの下に20pxのマージンを追加 */
+    }
+    h1 {
+        font-size: 24px; /* h1タグのフォントサイズを30pxに設定 */
+    }
+    .center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    </style>
+</head>
+<body>
+    <p>アキ姉ちゃんと遊ぼう</p>
+    <div class="center-content">
+        <img src="{{ url_for('static', filename=image) }}" alt="top image" style="width:150px;height:150px;">
+        <h1>{{ message }}</h1>
+    </div>
+    {% if playing %}
+        <form method="POST">
+            <input type="text" name="question" placeholder="質問を入力してください" required> <!-- required属性を追加 -->
+            <input type="submit" value="質問する">
+        </form>
+        <form method="POST">
+            <button type="submit" name="surrender">降参</button>
+        </form>
+    {% else %}
+        <form method="POST">
+            <button type="submit" name="play">Play</button>
+        </form>
+    {% endif %}
+    <p>ベータ版ですのでご了承ください</p>
+    <p>答えを当てるときは、単語だけを質問してください</p>
+    <a href="https://twitter.com/cheezekarubi">作者ツイッター</a>
+</body>
+</html>
