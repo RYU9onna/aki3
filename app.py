@@ -12,18 +12,26 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
-
 @app.route('/', methods=['GET', 'POST'])
 def home():
     playing = False
+    message = ""
     if 'image' not in session:
         session['image'] = 'top1.png'
     if 'openai_api_key' in session:
         openai.api_key = session['openai_api_key']
     else:
         openai.api_key = None
-    # ...
-    elif "set_api_key" in request.form:
+        if "play" in request.form:
+            message = "APIキーがセットされていません。"
+            return render_template('index.html', message=message, playing=playing, image=session['image'])
+    if 'image' not in session:
+        session['image'] = 'top1.png'
+    if 'openai_api_key' in session:
+        openai.api_key = session['openai_api_key']
+    else:
+        openai.api_key = None
+    if "set_api_key" in request.form:
         api_key = request.form['api_key']
         session['openai_api_key'] = api_key
         openai.api_key = api_key
