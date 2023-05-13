@@ -55,6 +55,14 @@
             <button type="submit" name="play">Play</button>
         </form>
     {% endif %}
+    <form method="POST">
+    <input type="text" name="api_key" placeholder="OPENAI_API_KEYを入力してください">
+        <button type="submit" name="set_api_key">APIキーをセット</button>
+    </form>
+    <!-- APIキーを解除するボタン -->
+    <form method="POST">
+        <button type="submit" name="clear_api_key">APIキーを解除</button>
+    </form>
     <p>ベータ版ですのでご了承ください</p>
     <p>答えを当てるときは、単語だけを質問してください</p>
     <a href="https://twitter.com/cheezekarubi">作者ツイッター</a>
